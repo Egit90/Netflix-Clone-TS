@@ -1,0 +1,7 @@
+export { Jumbotron } from './jumbotron'
+export { Footer } from './footer'
+export { Accordion } from './accordion'
+export { OptFrom } from './optForm'
+export { Header } from './header'
+export { Feature } from './feature'
+export { Form } from './form'

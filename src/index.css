@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo&family=Kanit:wght@200&family=Lato:wght@300&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html,
+body {
+    font-family: 'Arimo', 'sans-serif';
+    @apply bg-black;
+    @apply text-[#333333];
+    @apply text-[16px];
+}
+@media (max-width: 1000px) {
+    .flex-direction-on-small-screens {
+        @apply flex-col;
+        @apply m-auto;
+        @apply w-full;
+    }
+    .pane {
+        width: 100%;
+        padding: 0 45px;
+        text-align: center;
+        margin: auto;
+    }
+    .last-of-type h2 {
+        margin-bottom: 50px;
+    }
+    .sm-p {
+        padding: 70px 30px;
+    }
+    .grid_sm {
+        grid-template-columns: repeat(auto-fill, minmax(150, 1fr));
+    }
+}
