@@ -21,15 +21,15 @@ export const UserAuthContextProvider = ({ children }: Children) => {
     const [user, setUser] = useState<User | null | undefined>()
 
     //
-    const signUp = (email: string, password: string) => {
-        return createUserWithEmailAndPassword(auth, email, password)
+    const signUp = async (email: string, password: string) => {
+        return await createUserWithEmailAndPassword(auth, email, password)
     }
     const login = (email: string, password: string) => {
         return signInWithEmailAndPassword(auth, email, password)
     }
 
-    const setProfilePicture = (user: User, firstName: string) => {
-        return updateProfile(user, {
+    const setProfilePicture = async (user: User, firstName: string) => {
+        await updateProfile(user, {
             displayName: firstName,
             photoURL: `${Math.floor(Math.random() * 5) + 1}`,
         })

@@ -11,13 +11,13 @@ const SignUp = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
-    const { signUp, setProfilePicture, user } = useUserAuth()
+    const { signUp, setProfilePicture } = useUserAuth()
     const inValid = firstName === '' || password === '' || email === ''
 
     const handleSignUp = async (e: FormEvent) => {
         e.preventDefault()
         try {
-            await signUp(email, password)
+            const { user } = await signUp(email, password)
             await setProfilePicture(user, firstName)
             navigate(ROUTES.BROWSE)
         } catch (error) {
