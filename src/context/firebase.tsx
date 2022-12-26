@@ -28,7 +28,7 @@ export const UserAuthContextProvider = ({ children }: Children) => {
         return signInWithEmailAndPassword(auth, email, password)
     }
 
-    const setProfilePicture = async (user: User, firstName: string) => {
+    const updatePictureAndName = async (user: User, firstName: string) => {
         await updateProfile(user, {
             displayName: firstName,
             photoURL: `${Math.floor(Math.random() * 5) + 1}`,
@@ -44,7 +44,7 @@ export const UserAuthContextProvider = ({ children }: Children) => {
 
     return (
         <FirebaseContext.Provider
-            value={{ user, signUp, login, setProfilePicture }}
+            value={{ user, signUp, login, updatePictureAndName }}
         >
             {children}
         </FirebaseContext.Provider>
