@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, {
+    Context,
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from 'react'
 import {
     getAuth,
     signInWithEmailAndPassword,
@@ -14,8 +20,17 @@ import { auth } from '../lib/firebase.prod'
 interface Children {
     children: React.ReactNode
 }
+
+type Ctx = {
+    user: User | null | undefined
+    signUp: (email: string, password: string) => Promise<UserCredential>
+    login: (email: string, password: string) => Promise<UserCredential>
+    updatePictureAndName: (user: User, firstName: string) => Promise<void>
+    signOutFirebase: () => Promise<void>
+}
+
 //
-export const FirebaseContext = createContext<any>(null)
+export const FirebaseContext = createContext<Ctx>({} as Ctx)
 
 export const UserAuthContextProvider = ({ children }: Children) => {
     const [user, setUser] = useState<User | null | undefined>()
@@ -26,6 +41,9 @@ export const UserAuthContextProvider = ({ children }: Children) => {
     }
     const login = (email: string, password: string) => {
         return signInWithEmailAndPassword(auth, email, password)
+    }
+    const signOutFirebase = () => {
+        return signOut(auth)
     }
 
     const updatePictureAndName = async (user: User, firstName: string) => {
@@ -44,7 +62,13 @@ export const UserAuthContextProvider = ({ children }: Children) => {
 
     return (
         <FirebaseContext.Provider
-            value={{ user, signUp, login, updatePictureAndName }}
+            value={{
+                user,
+                signUp,
+                login,
+                updatePictureAndName,
+                signOutFirebase,
+            }}
         >
             {children}
         </FirebaseContext.Provider>
