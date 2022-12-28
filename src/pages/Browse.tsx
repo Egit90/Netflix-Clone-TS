@@ -6,13 +6,12 @@ import url from '../fixtures/tmdb.json'
 import BrowseContainer from '../containers/BrowseContainer'
 import { Movie } from '../hooks/useTmdb'
 const Browse = () => {
-    // let urlSting = `${url.getTrending.movies.url}`.replace(
-    //     '<<api_key>>',
-    //     import.meta.env.VITE_TMDB
-    // )
-    // const { data, error, isLoading } = useTmdb(urlSting)
-    let data: Movie[] = []
-
+    let urlSting = `${url.getTrending.movies.url}`.replace(
+        '<<api_key>>',
+        import.meta.env.VITE_TMDB
+    )
+    const { data, error, isLoading } = useTmdb(urlSting)
+    const movie = data[Math.floor(Math.random() * data.length)]
     return (
         <>
             {/* <button onClick={l}>SignOut</button>
@@ -27,7 +26,7 @@ const Browse = () => {
                     alt="test"
                 />
             )} */}
-            <BrowseContainer popular={data} />
+            <BrowseContainer popular={data} header={movie} />
         </>
     )
 }

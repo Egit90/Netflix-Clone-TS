@@ -31,3 +31,17 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(150, 1fr));
     }
 }
+
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.45);
+}
+.bg-cover-pic {
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.35),
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.35)
+    );
+    background: top;
+    background-size: cover;
+}

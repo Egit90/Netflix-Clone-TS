@@ -54,3 +54,14 @@
         transform: rotate(360deg);
     }
 }
+
+:global(.lock) {
+    body {
+        overflow: hidden;
+    }
+}
+:global(.Release) {
+    body {
+        overflow: visible;
+    }
+}
