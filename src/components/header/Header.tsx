@@ -1,4 +1,5 @@
 import React, { MouseEvent, MouseEventHandler } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 interface Props {
@@ -10,6 +11,11 @@ interface Props {
     onMouseEnter?: () => void
     onMouseLeave?: () => void
     onClick?: () => void
+}
+
+interface Input {
+    searchTerm: string
+    setSearchTerm: React.Dispatch<React.SetStateAction<string>>
 }
 
 const Header = ({ children, src, bg = true, definite = true }: Props) => {
@@ -167,6 +173,42 @@ Header.DropDown = ({ children }: Props) => {
         <div className="bg-black absolute mt-10 p-3 w-32 top-8 right-3 flex flex-col">
             {children}
         </div>
+    )
+}
+
+Header.Search = ({ searchTerm, setSearchTerm }: Input) => {
+    const [searchActive, setSearchActive] = useState(false)
+    let customMargin =
+        searchActive === true
+            ? 'ml-[10ox] py-0 px-[10] opacity-[1] w-[200px]'
+            : 'ml-0 p-0 opacity-[0] w-0'
+    return (
+        <div className="flex items-center invisible sm:visible">
+            <button
+                className="cursor-pointer bg-transparent border-none "
+                onClick={() => setSearchActive((prev) => !prev)}
+            >
+                <img
+                    src="/images/icons/search.png"
+                    alt="search"
+                    className="filter brightness-0 invert-[1] w-4"
+                />
+            </button>
+            <input
+                className={`bg-[#44444459] text-white border-[1px] border-solid border-white ${customMargin} transition-all ease-in-out`}
+                value={searchTerm}
+                onChange={({ target }) => setSearchTerm(target.value)}
+                placeholder="Search Films and Series"
+            />
+        </div>
+    )
+}
+
+Header.PlayButton = ({ children }: Props) => {
+    return (
+        <button className=" font-bold shadow-md bg-[#e6e6e6] border-0 py-2 px-5 rounded-md max-w-[130px] text-xl mt-6 cursor-pointer transition-colors ease-in-out hover:bg-[#ff1e1e] hover:text-white">
+            {children}
+        </button>
     )
 }
 

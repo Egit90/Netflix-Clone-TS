@@ -17,6 +17,7 @@ export interface Profile {
 
 const BrowseContainer = ({ popular, header }: Props) => {
     const [dropDownVisible, setDropDownVisible] = useState(false)
+    const [searchTerm, setSearchTerm] = useState('')
     const [profile, setProfile] = useState({} as Profile)
     const [loading, setLoading] = useState(true)
     const { user, signOutFirebase } = useUserAuth()
@@ -49,6 +50,10 @@ const BrowseContainer = ({ popular, header }: Props) => {
                         <Header.TextLink>Films</Header.TextLink>
                     </Header.Group>
                     <Header.Group>
+                        <Header.Search
+                            searchTerm={searchTerm}
+                            setSearchTerm={setSearchTerm}
+                        />
                         <Header.Profile
                             onMouseEnter={() => {
                                 setDropDownVisible(true)
@@ -87,6 +92,7 @@ const BrowseContainer = ({ popular, header }: Props) => {
                         {header.title}
                     </Header.FeatureCallOut>
                     <Header.Text>{header.overview}</Header.Text>
+                    <Header.PlayButton>Play</Header.PlayButton>
                 </Header.Feature>
             </Header.HeaderForBrowse>
         </>
