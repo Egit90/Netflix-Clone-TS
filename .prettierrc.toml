@@ -4,3 +4,4 @@ tabWidth = 4
 semi = false
 singleQuote = true
 max_line_length =  300
+jsxBracketSameLine = true

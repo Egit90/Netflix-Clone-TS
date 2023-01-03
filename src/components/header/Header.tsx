@@ -1,6 +1,9 @@
-import React, { MouseEvent, MouseEventHandler } from 'react'
+import React, { MouseEvent, MouseEventHandler, useContext } from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+
+import { useUserAuth } from '../../context/firebase'
+import { activeContext } from '../../containers/BrowseContainer'
 
 interface Props {
     children?: React.ReactNode
@@ -11,6 +14,12 @@ interface Props {
     onMouseEnter?: () => void
     onMouseLeave?: () => void
     onClick?: () => void
+    visible?: boolean
+}
+
+interface TextLinkProps {
+    title: string
+    action: 'active' | 'display' | 'signOut'
 }
 
 interface Input {
@@ -32,8 +41,7 @@ const Header = ({ children, src, bg = true, definite = true }: Props) => {
     return bg ? (
         <div
             style={style}
-            className={`flex flex-col ${backGround} bg-left-top bg-cover bg-no-repeat`}
-        >
+            className={`flex flex-col ${backGround} bg-left-top bg-cover bg-no-repeat`}>
             {children}
         </div>
     ) : (
@@ -57,7 +65,9 @@ Header.HeaderForBrowse = ({
     }
 
     return bg ? (
-        <div style={style} className={`flex flex-col bg-cover-pic`}>
+        <div
+            style={style}
+            className={`flex flex-col bg-cover-pic transition-all ease-in-out`}>
             {children}
         </div>
     ) : (
@@ -82,7 +92,7 @@ Header.Group = ({ children }: Props) => {
 }
 Header.Feature = ({ children, src }: Props) => {
     return (
-        <div className="flex flex-col  my-0 mx-8 pt-24 lg:pt-36 pb-[500px] px-0   w-1/2">
+        <div className="flex flex-col  my-0 mx-8 pt-20 lg:pt-24 pb-[500px] px-0   w-1/2 h-[500px]">
             {children}
         </div>
     )
@@ -100,8 +110,7 @@ Header.Button = ({ to, text }: { to: string; text: string }) => {
     return (
         <Link
             to={to}
-            className="block bg-[#e50914] w-20 h-fit mx-0 mr-8 text-white border-none text-[16px] leading-normal text-start rounded-sm py-2 px-4 cursor-pointer box-border hover:bg-[#f40612] "
-        >
+            className="block bg-[#e50914] w-20 h-fit mx-0 mr-8 text-white border-none text-[16px] leading-normal text-start rounded-sm py-2 px-4 cursor-pointer box-border hover:bg-[#f40612] ">
             {text}
         </Link>
     )
@@ -113,15 +122,45 @@ Header.Text = ({ children }: Props) => {
         </p>
     )
 }
-Header.TextLink = ({ children, onClick }: Props) => {
-    return (
-        <p
-            onClick={onClick}
-            className="text-white ml-6 mr-7 cursor-pointer hover:font-bold last-of-type:mr-0"
-        >
-            {children}
-        </p>
-    )
+Header.TextLink = ({ title, action }: TextLinkProps) => {
+    const { active, setActive } = useContext(activeContext)
+    const { user, signOutFirebase } = useUserAuth()
+    const signOut = async () => {
+        try {
+            await signOutFirebase()
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    if (action === 'active') {
+        return (
+            <p
+                onClick={() => setActive(title)}
+                className={`text-white ml-6 mr-7 cursor-pointer hover:font-bold last-of-type:mr-0 ${
+                    active === title ? 'font-bold' : ''
+                }`}>
+                {title}
+            </p>
+        )
+    } else if (action === 'display') {
+        return (
+            <p
+                className={`text-white ml-6 mr-7 cursor-pointer hover:font-bold last-of-type:mr-0 `}>
+                {user?.displayName}
+            </p>
+        )
+    } else {
+        return (
+            <p
+                onClick={signOut}
+                className={`text-white ml-6 mr-7 cursor-pointer hover:font-bold last-of-type:mr-0 ${
+                    active === title ? 'font-bold' : ''
+                }`}>
+                Sign Out
+            </p>
+        )
+    }
 }
 
 Header.Logo = ({
@@ -153,8 +192,7 @@ Header.Profile = ({ children, onMouseEnter, onMouseLeave }: Props) => {
         <div
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            className="flex items-center ml-5 relative "
-        >
+            className="flex items-center ml-5 relative ">
             {children}
         </div>
     )
@@ -162,22 +200,25 @@ Header.Profile = ({ children, onMouseEnter, onMouseLeave }: Props) => {
 Header.Picture = ({ src }: Props) => {
     return (
         <button
-            style={{ backgroundImage: `url(${src})` }}
+            style={{ backgroundImage: `url(/images/users/${src}.png)` }}
             className={`bg-contain border-none w-8 h-7 cursor-pointer bg-no-repeat`}
         />
     )
 }
 
-Header.DropDown = ({ children }: Props) => {
+Header.DropDown = ({ children, visible }: Props) => {
     return (
-        <div className="bg-black absolute mt-10 p-3 w-32 top-8 right-3 flex flex-col">
+        <div
+            className={`bg-black absolute mt-10 p-3 w-32 top-8 right-3 flex flex-col
+        ${visible === false ? 'invisible' : visible}`}>
             {children}
         </div>
     )
 }
 
-Header.Search = ({ searchTerm, setSearchTerm }: Input) => {
+Header.Search = () => {
     const [searchActive, setSearchActive] = useState(false)
+    const [searchTerm, setSearchTerm] = useState('')
     let customMargin =
         searchActive === true
             ? 'ml-[10ox] py-0 px-[10] opacity-[1] w-[200px]'
@@ -186,8 +227,7 @@ Header.Search = ({ searchTerm, setSearchTerm }: Input) => {
         <div className="flex items-center invisible sm:visible">
             <button
                 className="cursor-pointer bg-transparent border-none "
-                onClick={() => setSearchActive((prev) => !prev)}
-            >
+                onClick={() => setSearchActive((prev) => !prev)}>
                 <img
                     src="/images/icons/search.png"
                     alt="search"

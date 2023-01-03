@@ -17,6 +17,7 @@ export interface Movie {
     video: boolean
     vote_average: number
     vote_count: number
+    name: string
 }
 
 const useTmdb = (url: string) => {
@@ -35,11 +36,13 @@ const useTmdb = (url: string) => {
         }
     }
     useEffect(() => {
-        console.log('Hook is Engaged')
+        console.log('hook')
         setIsLoading(true)
-
         fetchData()
     }, [url])
+
+    // let movie = data[Math.floor(Math.random() * data.length)]
+
     return { isLoading, data, error }
 }
 export default useTmdb
